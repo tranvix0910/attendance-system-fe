@@ -9,5 +9,8 @@ export default defineConfig({
     },
     define: {
         global: {}
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
     }
 })
