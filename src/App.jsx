@@ -2,7 +2,7 @@ import './App.css'
 
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
-import Layout from './components/Shared/Layout'
+import Layout from './components/Shared/Layout.jsx'
 import Profile from './pages/Profile'
 import Subject from './pages/Subject'
 import Students from './pages/Students'
