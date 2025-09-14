@@ -1,20 +1,43 @@
+import { useEffect } from 'react'
+import { useLanguage } from '../contexts/LanguageContext'
 import DashboardStats from '../components/Dashboard/DashboardStats'
-import TransactionChart from '../components/Dashboard/TransactionChart'
-import BuyerProfilePieChart from '../components/Dashboard/BuyerProfilePieChart'
-import RecentAttended from '../components/Dashboard/RecentAttended'
-import PopularProducts from '../components/Dashboard/PopularProducts'
+import RecentAttendance from '../components/Dashboard/RecentAttended'
 
 const Dashboard = () => {
+    const { t } = useLanguage()
+    
+    useEffect(() => {
+        // Add entrance animations
+        const elements = document.querySelectorAll('.dashboard-element')
+        elements.forEach((element, index) => {
+            element.style.opacity = '0'
+            element.style.transform = 'translateY(20px)'
+            setTimeout(() => {
+                element.style.transition = 'all 0.6s ease-out'
+                element.style.opacity = '1'
+                element.style.transform = 'translateY(0)'
+            }, index * 100)
+        })
+    }, [])
+
     return (
-        <div className="flex flex-col gap-4">
-            <DashboardStats />
-            <div className="flex flex-row gap-4 w-full">
-                <TransactionChart />
-                <BuyerProfilePieChart />
+        <div className="space-y-4 sm:space-y-6">
+            {/* Welcome Section */}
+            <div className="dashboard-element">
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-xl p-4 sm:p-6 text-white shadow-lg">
+                    <h1 className="text-xl sm:text-2xl font-bold mb-2">{t('welcomeBack')}</h1>
+                    <p className="text-indigo-100 text-sm sm:text-base">{t('dashboardSubtitle')}</p>
+                </div>
             </div>
-            <div className="flex flex-row gap-4 w-full">
-                <RecentAttended />
-                <PopularProducts />
+
+            {/* Stats Cards */}
+            <div className="dashboard-element">
+                <DashboardStats />
+            </div>
+
+            {/* Recent Attendance Section */}
+            <div className="dashboard-element">
+                <RecentAttendance />
             </div>
         </div>
     )

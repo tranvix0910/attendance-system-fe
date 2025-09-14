@@ -1,38 +1,59 @@
-import { HiOutlineViewGrid, HiOutlineUsers, HiOutlineUserCircle, HiOutlineCog } from 'react-icons/hi'
+import { 
+    HiOutlineViewGrid, 
+    HiOutlineUsers, 
+    HiOutlineUserCircle, 
+    HiOutlineCog,
+    HiOutlineAcademicCap,
+    HiOutlineCalendar,
+    HiOutlineClipboardList
+} from 'react-icons/hi'
 
 import { MdSubject } from 'react-icons/md'
+import { FaGraduationCap } from 'react-icons/fa'
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'dashboard',
-        label: 'Dashboard',
+        labelKey: 'dashboard',
         path: '/dashboard',
         icon: <HiOutlineViewGrid />
     },
     {
-        key: 'Subject',
-        label: 'Subject',
-        path: '/subject',
+        key: 'students',
+        labelKey: 'students',
+        path: '/students',
+        icon: <HiOutlineUsers />
+    },
+    {
+        key: 'subjects',
+        labelKey: 'subjects',
+        path: '/subjects',
         icon: <MdSubject />
     },
     {
-        key: 'student',
-        label: 'Attendance',
+        key: 'attendance',
+        labelKey: 'attendance',
         path: '/attendance',
-        icon: <HiOutlineUsers />
+        icon: <HiOutlineClipboardList />
+    },
+    {
+        key: 'schedule',
+        labelKey: 'schedule',
+        path: '/schedule',
+        icon: <HiOutlineCalendar />
     }
 ]
 
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     {
         key: 'profile',
-        label: 'Profile',
+        labelKey: 'profile',
         path: '/dashboard/profile',
         icon: <HiOutlineUserCircle />
     },
     {
         key: 'settings',
-        label: 'Settings',
+        labelKey: 'settings',
         path: '/settings',
         icon: <HiOutlineCog />
     }

@@ -35,4 +35,25 @@
     .inbox-height {
         @apply h-[calc(100vh_-_8.125rem)] lg:h-[calc(100vh_-_5.625rem)];
     }
+
+    /* Animation for success notification */
+    .animate-slide-in-right {
+        animation: slideInRight 0.3s ease-out forwards;
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Custom border width for danger zone */
+    .border-3 {
+        border-width: 3px;
+    }
 }

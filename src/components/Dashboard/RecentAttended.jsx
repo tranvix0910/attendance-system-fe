@@ -1,103 +1,158 @@
 import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
-import { getOrderStatus } from '../../lib/helpers'
+import { useEffect, useState } from 'react'
+import { HiOutlineCheckCircle, HiOutlineXCircle, HiOutlineClock } from 'react-icons/hi'
+import { getAllAttendance } from '../../api/attendance/getAttendance'
+import { useLanguage } from '../../contexts/LanguageContext'
 
-const recentOrderData = [
-    {
-        id: '1',
-        product_id: '4324',
-        customer_id: '23143',
-        customer_name: 'Shirley A. Lape',
-        order_date: '2022-05-17T03:24:00',
-        order_total: '$435.50',
-        current_order_status: 'PLACED',
-        shipment_address: 'Cottage Grove, OR 97424'
-    },
-    {
-        id: '7',
-        product_id: '7453',
-        customer_id: '96453',
-        customer_name: 'Ryan Carroll',
-        order_date: '2022-05-14T05:24:00',
-        order_total: '$96.35',
-        current_order_status: 'CONFIRMED',
-        shipment_address: 'Los Angeles, CA 90017'
-    },
-    {
-        id: '2',
-        product_id: '5434',
-        customer_id: '65345',
-        customer_name: 'Mason Nash',
-        order_date: '2022-05-17T07:14:00',
-        order_total: '$836.44',
-        current_order_status: 'SHIPPED',
-        shipment_address: 'Westminster, CA 92683'
-    },
-    {
-        id: '3',
-        product_id: '9854',
-        customer_id: '87832',
-        customer_name: 'Luke Parkin',
-        order_date: '2022-05-16T12:40:00',
-        order_total: '$334.50',
-        current_order_status: 'SHIPPED',
-        shipment_address: 'San Mateo, CA 94403'
-    },
-    {
-        id: '4',
-        product_id: '8763',
-        customer_id: '09832',
-        customer_name: 'Anthony Fry',
-        order_date: '2022-05-14T03:24:00',
-        order_total: '$876.00',
-        current_order_status: 'OUT_FOR_DELIVERY',
-        shipment_address: 'San Mateo, CA 94403'
-    },
-    {
-        id: '5',
-        product_id: '5627',
-        customer_id: '97632',
-        customer_name: 'Ryan Carroll',
-        order_date: '2022-05-14T05:24:00',
-        order_total: '$96.35',
-        current_order_status: 'DELIVERED',
-        shipment_address: 'Los Angeles, CA 90017'
+const getStatusIcon = (status) => {
+    switch (status) {
+        case 'PRESENT':
+            return <HiOutlineCheckCircle className="text-green-500" />
+        case 'ABSENT':
+            return <HiOutlineXCircle className="text-red-500" />
+        case 'LATE':
+            return <HiOutlineClock className="text-yellow-500" />
+        default:
+            return <HiOutlineClock className="text-gray-500" />
     }
-]
+}
 
-export default function RecentOrders() {
+const getStatusText = (status, t) => {
+    switch (status) {
+        case 'PRESENT':
+            return t('onTime')
+        case 'ABSENT':
+            return t('absentStatus')
+        case 'LATE':
+            return t('lateStatus')
+        default:
+            return t('notCheckedIn')
+    }
+}
+
+const getStatusColor = (status) => {
+    switch (status) {
+        case 'PRESENT':
+            return 'text-green-600 bg-green-50'
+        case 'ABSENT':
+            return 'text-red-600 bg-red-50'
+        case 'LATE':
+            return 'text-yellow-600 bg-yellow-50'
+        default:
+            return 'text-gray-600 bg-gray-50'
+    }
+}
+
+export default function RecentAttendance() {
+    const { t } = useLanguage()
+    const [attendanceData, setAttendanceData] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const fetchRecentAttendance = async () => {
+            try {
+                setLoading(true)
+                const res = await getAllAttendance()
+                
+                if (res?.success && res?.data) {
+                    // Sort by attended_at descending and take first 10 records
+                    const sortedData = res.data
+                        .filter(record => record.attended_at) // Only records with attendance time
+                        .sort((a, b) => new Date(b.attended_at) - new Date(a.attended_at))
+                        .slice(0, 10)
+                    
+                    setAttendanceData(sortedData)
+                } else {
+                    setAttendanceData([])
+                }
+            } catch (error) {
+                console.error('Error fetching attendance data:', error)
+                setAttendanceData([])
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchRecentAttendance()
+    }, [])
+
+    if (loading) {
+        return (
+            <div className="bg-white px-6 pt-6 pb-6 rounded-xl border border-gray-200 shadow-sm flex-1">
+                <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('recentAttendance')}</h3>
+                    <p className="text-sm text-gray-600">{t('latestAttendanceList')}</p>
+                </div>
+                <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                    <span className="ml-3 text-gray-600">{t('loading')}</span>
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <div className="bg-white px-4 pt-3 pb-4 rounded-sm border border-gray-200 flex-1">
-            <strong className="text-neutral-700 font-semibold">Recent Orders</strong>
-            <div className="rounded-sm mt-3">
-                <table className="w-full border-collapse table-fixed">
-                    <thead className="rounded-sm bg-gray-100 text-neutral-600">
-                        <tr className="text-sm font-medium uppercase xsm:text-base">
-                            <th className="p-2 xl:p-5">ID</th>
-                            <th className="p-2 xl:p-5">Student ID</th>
-                            <th className="p-2 xl:p-5">Class Name</th>
-                            <th className="p-2 xl:p-5">Attended At</th>
+        <div className="bg-white px-6 pt-6 pb-6 rounded-xl border border-gray-200 shadow-sm flex-1">
+            <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">{t('recentAttendance')}</h3>
+                <p className="text-sm text-gray-600">{t('latestAttendanceList')}</p>
+            </div>
+            <div className="overflow-hidden">
+                <table className="w-full">
+                    <thead className="bg-gray-50 rounded-lg">
+                        <tr className="text-sm font-medium text-gray-600">
+                            <th className="p-3 text-left">{t('studentName')}</th>
+                            <th className="p-3 text-left">{t('class')}</th>
+                            <th className="p-3 text-left">{t('subjectName')}</th>
+                            <th className="p-3 text-left">{t('statusLabel')}</th>
+                            <th className="p-3 text-left">{t('time')}</th>
                         </tr>
                     </thead>
-                    <tbody className="rounded-sm text-neutral-600">
-                        {recentOrderData.map((order) => (
-                            <tr key={order.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 text-center">
-                                    <Link to={`/order/${order.id}`}>#{order.id}</Link>
+                    <tbody className="divide-y divide-gray-100">
+                        {attendanceData.length > 0 ? attendanceData.map((attendance) => (
+                            <tr key={attendance.id} className="hover:bg-gray-50 transition-colors duration-200">
+                                <td className="p-3">
+                                    <div>
+                                        <div className="font-medium text-gray-900">{attendance.student_name}</div>
+                                        <div className="text-sm text-gray-500">#{attendance.student_id}</div>
+                                    </div>
                                 </td>
-                                <td className="px-4 py-3 text-center">
-                                    <Link to={`/product/${order.product_id}`}>#{order.product_id}</Link>
+                                <td className="p-3">
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {attendance.class_name}
+                                    </span>
                                 </td>
-                                <td className="px-4 py-3 text-center">
-                                    <Link to={`/customer/${order.customer_id}`}>{order.customer_name}</Link>
+                                <td className="p-3 text-sm text-gray-600">{attendance.subject || 'N/A'}</td>
+                                <td className="p-3">
+                                    <div className="flex items-center gap-2">
+                                        {getStatusIcon(attendance.status)}
+                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(attendance.status)}`}>
+                                            {getStatusText(attendance.status, t)}
+                                        </span>
+                                    </div>
                                 </td>
-                                <td className="px-4 py-3 text-center">
-                                    {format(new Date(order.order_date), 'dd MMM yyyy')}
+                                <td className="p-3 text-sm text-gray-600">
+                                    {format(new Date(attendance.attended_at), 'dd/MM/yyyy HH:mm')}
                                 </td>
                             </tr>
-                        ))}
+                        )) : (
+                            <tr>
+                                <td colSpan="5" className="p-8 text-center text-gray-500">
+                                    {t('noRecentAttendance')}
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-100">
+                <Link 
+                    to="/attendance" 
+                    className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
+                >
+                    {t('viewAllAttendance')} →
+                </Link>
             </div>
         </div>
     )

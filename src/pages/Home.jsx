@@ -1,76 +1,253 @@
-import COVER_IMAGE from '../assets/images/bg.png'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { HiOutlineAcademicCap, HiOutlineUsers, HiOutlineClipboardList, HiOutlineChartBar, HiOutlineMenu, HiX, HiOutlineCheckCircle, HiOutlineStar } from 'react-icons/hi'
+import { useState } from 'react'
+import bgImage from '../assets/images/bg.png'
+import ptitLogo from '../assets/images/ptit-bg.png'
 
-const Login = () => {
+const Home = () => {
     const navigate = useNavigate()
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const handleLogin = () => {
         navigate('/login')
     }
 
+    const features = [
+        {
+            icon: <HiOutlineUsers className="text-2xl sm:text-3xl text-indigo-600" />,
+            title: "Student Management",
+            description: "Efficiently manage student profiles, enrollment, and academic records with our comprehensive student management system."
+        },
+        {
+            icon: <HiOutlineAcademicCap className="text-2xl sm:text-3xl text-emerald-600" />,
+            title: "Class Management",
+            description: "Organize and manage classes, schedules, and academic sessions with intuitive tools designed for educational institutions."
+        },
+        {
+            icon: <HiOutlineClipboardList className="text-2xl sm:text-3xl text-purple-600" />,
+            title: "Smart Attendance",
+            description: "Advanced attendance tracking with automated features, real-time monitoring, and accurate reporting capabilities."
+        },
+        {
+            icon: <HiOutlineChartBar className="text-2xl sm:text-3xl text-amber-600" />,
+            title: "Detailed Reports",
+            description: "Generate comprehensive reports and analytics to track attendance patterns, student performance, and institutional metrics."
+        }
+    ]
+
     return (
-        <>
-            <div className="w-full h-screen flex item-start">
-                <div className="relative w-1/2 h-full flex flex-cal">
-                    <img src={COVER_IMAGE} className="w-full h-full object-cover" />
-                </div>
-
-                <div className="w-1/2 h-full bg-[#24303f] flex flex-col p-20 justify-center">
-                    <div className="flex gap-x-3 text-x text-pretty text-lg/8 text-gray-300">
-                        Smart Attendance System
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-6 text-[#ebf45d]"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"
-                            />
-                        </svg>
-                    </div>
-
-                    <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-                        <div className="text-balance text-3xl font-semibold tracking-tight text-[#ebf45d] sm:text-4xl">
-                            <h2>Welcome!</h2>
+        <div className="min-h-screen bg-slate-50">
+            {/* Navigation */}
+            <nav className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-slate-200 fixed w-full z-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-16">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                <div className="flex items-center">
+                                    <div className="p-2">
+                                        <img 
+                                            src={ptitLogo} 
+                                            alt="PTIT Logo" 
+                                            className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                                        />
+                                    </div>
+                                    <span className="ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent truncate">
+                                        <span className="hidden sm:inline">PTIT Attendance System</span>
+                                        <span className="sm:hidden">PTIT</span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <p className="mt-6 text-pretty text-lg/8 text-gray-300">
-                            Effortlessly manage student attendance with our advanced facial recognition technology. This
-                            system allows teachers to streamline the attendance process, saving time and reducing
-                            errors.
-                        </p>
-
-                        <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
+                        
+                        {/* Desktop menu */}
+                        <div className="hidden md:flex items-center space-x-4">
                             <button
                                 onClick={handleLogin}
-                                className="flex items-center gap-x-3 rounded-md bg-[#ebf45d] px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                                className="bg-gradient-to-r from-slate-700 to-slate-900 text-white px-6 py-2.5 rounded-full hover:from-slate-800 hover:to-black transition-all duration-300 transform hover:scale-105 shadow-lg"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1.5}
-                                    stroke="currentColor"
-                                    className="size-6"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
-                                    />
-                                </svg>
-                                Login as a Teacher
+                                Login
+                            </button>
+                        </div>
+
+                        {/* Mobile menu button */}
+                        <div className="md:hidden">
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors duration-200"
+                            >
+                                {mobileMenuOpen ? <HiX className="text-xl" /> : <HiOutlineMenu className="text-xl" />}
                             </button>
                         </div>
                     </div>
                 </div>
+                
+                {/* Mobile menu */}
+                {mobileMenuOpen && (
+                    <div className="md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-sm">
+                        <div className="px-4 py-3 space-y-2">
+                            <button
+                                onClick={handleLogin}
+                                className="w-full text-left bg-gradient-to-r from-slate-700 to-slate-900 text-white px-4 py-2.5 rounded-full hover:from-slate-800 hover:to-black transition-all duration-300"
+                            >
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </nav>
+
+            {/* Hero Section */}
+            <div 
+                className="relative min-h-screen flex items-center justify-center overflow-hidden"
+                style={{
+                    backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.8) 100%), url(${bgImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundAttachment: 'fixed'
+                }}
+            >
+                {/* Animated background elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-white/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-2xl animate-ping"></div>
+                </div>
+
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+                    <div className="mb-8">
+                        <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                            <HiOutlineStar className="text-yellow-300 mr-2" />
+                            <span className="text-white text-sm font-medium">Smart Attendance System</span>
+                        </div>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                            Revolutionize Your
+                            <span className="block bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent"> 
+                                Attendance Management
+                            </span>
+                        </h1>
+                        <p className="text-xl sm:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light">
+                            Experience the future of educational administration with our intelligent attendance tracking system designed for modern institutions.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md sm:max-w-none mx-auto">
+                            <button
+                                onClick={handleLogin}
+                                className="group w-full sm:w-auto bg-white text-slate-800 px-8 py-4 rounded-full text-lg font-semibold hover:bg-slate-50 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                            >
+                                <span className="flex items-center justify-center">
+                                    Get Started
+                                    <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
+                            </button>
+                            <button className="w-full sm:w-auto border-2 border-white text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:text-slate-800 transition-all duration-300 transform hover:scale-105">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Trust indicators */}
+                    <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+                        <div className="text-white/80">
+                            <div className="text-3xl font-bold">99%</div>
+                            <div className="text-sm">Accuracy</div>
+                        </div>
+                        <div className="text-white/80">
+                            <div className="text-3xl font-bold">24/7</div>
+                            <div className="text-sm">Support</div>
+                        </div>
+                        <div className="text-white/80">
+                            <div className="text-3xl font-bold">1000+</div>
+                            <div className="text-sm">Schools</div>
+                        </div>
+                        <div className="text-white/80">
+                            <div className="text-3xl font-bold">5★</div>
+                            <div className="text-sm">Rating</div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Scroll indicator */}
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+                    <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+                        <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
+                    </div>
+                </div>
             </div>
-        </>
+
+            {/* Features Section */}
+            <div className="py-20 bg-white relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <div className="inline-flex items-center bg-slate-100 text-slate-700 rounded-full px-4 py-2 mb-4">
+                            <HiOutlineCheckCircle className="mr-2" />
+                            <span className="text-sm font-medium">Key Features</span>
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
+                            Powerful Features for Modern Education
+                        </h2>
+                        <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                            Discover comprehensive tools designed to streamline attendance management and enhance educational administration efficiency.
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {features.map((feature, index) => (
+                            <div key={index} className="group relative">
+                                <div className="bg-gradient-to-br from-white to-slate-50 p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-slate-100 h-full">
+                                    <div className="flex justify-center mb-6">
+                                        <div className="bg-gradient-to-r from-slate-600 to-slate-800 p-4 rounded-2xl group-hover:scale-110 transition-transform duration-300">
+                                            {React.cloneElement(feature.icon, { className: "text-3xl text-white" })}
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-slate-900 mb-4 text-center">
+                                        {feature.title}
+                                    </h3>
+                                    <p className="text-slate-600 leading-relaxed text-center">
+                                        {feature.description}
+                                    </p>
+                                </div>
+                                {/* Gradient border effect */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-slate-500 to-slate-700 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300 -z-10"></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <footer className="bg-slate-900 text-white py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                        <div className="flex items-center justify-center mb-6">
+                            <div className="bg-white p-3 rounded-xl shadow-lg">
+                                <img 
+                                    src={ptitLogo} 
+                                    alt="PTIT Logo" 
+                                    className="w-10 h-10 object-contain"
+                                />
+                            </div>
+                            <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-slate-400 to-slate-600 bg-clip-text text-transparent">
+                                PTIT Attendance System
+                            </span>
+                        </div>
+                        <p className="text-slate-400 text-lg mb-8">
+                            Version 2024 - Advanced Educational Technology
+                        </p>
+                        <div className="border-t border-slate-700 pt-8">
+                            <p className="text-slate-500">
+                                © 2024 PTIT Attendance System. All rights reserved.
+                            </p>
+                            <p className="text-slate-500">
+                                Tran Dai Vi - PTIT
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
     )
 }
 
-export default Login
+export default Home
